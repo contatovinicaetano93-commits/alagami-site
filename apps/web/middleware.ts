@@ -8,8 +8,20 @@ import {
   resolveLegacyRedirect,
 } from "@/lib/canonical-flow";
 
+/** SEO, metadata e assets públicos — nunca redirecionar para /login. */
+const PUBLIC_STATIC_PATHS = [
+  "/robots.txt",
+  "/sitemap.xml",
+  "/og-image.png",
+  "/favicon.ico",
+  "/icon",
+  "/apple-icon",
+  "/manifest.webmanifest",
+] as const;
+
 const PUBLIC_PATHS = [
   ...PUBLIC_MARKETING_PATHS,
+  ...PUBLIC_STATIC_PATHS,
   "/api/auth",
   "/api/proxy/auth",
   "/api/proxy/health",
@@ -26,6 +38,14 @@ function decodeJwt(token: string): { role?: string; exp?: number } | null {
     role: raw ? (normalizeRole(raw) ?? undefined) : undefined,
     exp: typeof payload.exp === "number" ? payload.exp : undefined,
   };
+}
+
+function isPublicPath(pathname: string): boolean {
+  if (PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+    return true;
+  }
+  // Arquivos estáticos em /public (extensão conhecida)
+  return /\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml|pdf|xlsx|woff2?)$/i.test(pathname);
 }
 
 export function middleware(request: NextRequest) {
@@ -46,8 +66,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(legacyDest, request.url));
   }
 
-  const isPublic = PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`));
-  if (isPublic) return NextResponse.next();
+  if (isPublicPath(pathname)) return NextResponse.next();
 
   const token = request.cookies.get("access_token")?.value;
   if (!token) {
@@ -76,5 +95,11 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    /*
+     * Ignora assets do Next e arquivos estáticos comuns.
+     * robots/sitemap ficam no matcher mas são liberados via PUBLIC_STATIC_PATHS.
+     */
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+  ],
 };

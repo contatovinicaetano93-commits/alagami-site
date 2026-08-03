@@ -11,13 +11,13 @@ export async function POST(req: NextRequest) {
     path: '/credito/simular',
     method: 'POST',
     body,
-    wakeFirst: true,
-    maxAttemptsPerApi: 6,
+    origin: req.nextUrl.origin,
+    maxAttemptsPerApi: 3,
   });
 
   if (!res) {
     return NextResponse.json(
-      { message: 'Serviço indisponível. A API pode estar acordando — tente novamente em 1–2 minutos.' },
+      { message: 'Serviço indisponível. Tente novamente em instantes.' },
       { status: 503 },
     );
   }

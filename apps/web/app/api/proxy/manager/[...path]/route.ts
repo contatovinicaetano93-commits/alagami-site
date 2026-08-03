@@ -27,15 +27,13 @@ async function proxy(req: NextRequest, path: string[], method: string) {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    maxAttemptsPerApi: method === 'GET' ? 6 : 4,
+    origin: req.nextUrl.origin,
+    maxAttemptsPerApi: 3,
   });
 
   if (!res) {
     return NextResponse.json(
-      {
-        message:
-          'API indisponível no momento. O servidor Render pode levar até 1–2 minutos para acordar — tente novamente.',
-      },
+      { message: 'API indisponível no momento. Tente novamente em instantes.' },
       { status: 503 },
     );
   }

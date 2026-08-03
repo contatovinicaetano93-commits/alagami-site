@@ -35,6 +35,7 @@ export default function LandingPage() {
   const router = useRouter();
   const [scrolled,   setScrolled]   = useState(false);
   const [isMobile,   setIsMobile]   = useState(false);
+  const [menuOpen,   setMenuOpen]   = useState(false);
   const [activeTab,  setActiveTab]  = useState("login");
   const [modalOpen,  setModalOpen]  = useState(false);
 
@@ -46,9 +47,7 @@ export default function LandingPage() {
   const [showCadPass,   setShowCadPass]   = useState(false);
 
   const [cadNome,     setCadNome]     = useState("");
-  const [cadCpf,      setCadCpf]      = useState("");
   const [cadEmail,    setCadEmail]    = useState("");
-  const [cadTelefone, setCadTelefone] = useState("");
   const [cadSenha,    setCadSenha]    = useState("");
   const [cadTermos,   setCadTermos]   = useState(false);
   const [cadPrivacy,  setCadPrivacy]  = useState(false);
@@ -104,9 +103,9 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = modalOpen ? "hidden" : "";
+    document.body.style.overflow = modalOpen || menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [modalOpen]);
+  }, [modalOpen, menuOpen]);
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -144,7 +143,10 @@ export default function LandingPage() {
     finally { setCadLoading(false); }
   }
 
-  function scrollTo(id: string) { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); }
+  function scrollTo(id: string) {
+    setMenuOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  }
 
   function handleCardTilt(e: React.MouseEvent<HTMLDivElement>) {
     if (!window.matchMedia("(pointer: fine)").matches) return;
@@ -164,7 +166,7 @@ export default function LandingPage() {
   return (
     <>
       {/* ── NAV ── */}
-      <nav className={`landing-nav${scrolled ? " scrolled" : ""}`}>
+      <nav className={`landing-nav${scrolled ? " scrolled" : ""}${menuOpen ? " menu-open" : ""}`}>
         <a className="logo" href="#"><LogoIcon /><span className="logo-name">IMOBI</span></a>
         <ul className="nav-links">
           <li><a href="/envie-seu-projeto">Envie seu projeto</a></li>
@@ -176,13 +178,35 @@ export default function LandingPage() {
           <button className="btn-login" onClick={() => setModalOpen(true)}>Entrar</button>
           <button className="btn-cta"   onClick={() => router.push("/envie-seu-projeto" as Route)}>Envie seu projeto</button>
         </div>
-        {isMobile && (
-          <div className="nav-mobile-auth">
-            <button className="btn-login" onClick={() => setModalOpen(true)}>Entrar</button>
-            <button className="btn-cta" onClick={() => router.push("/envie-seu-projeto" as Route)}>Envie seu projeto</button>
-          </div>
-        )}
+        <div className="nav-mobile-bar">
+          <button className="btn-login" onClick={() => { setMenuOpen(false); setModalOpen(true); }}>Entrar</button>
+          <button
+            type="button"
+            className={`nav-hamburger${menuOpen ? " open" : ""}`}
+            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <span /><span /><span />
+          </button>
+        </div>
       </nav>
+
+      {menuOpen && (
+        <div className="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu">
+          <a href="/envie-seu-projeto" onClick={() => setMenuOpen(false)}>Envie seu projeto</a>
+          <button type="button" onClick={() => scrollTo("vantagens")}>Vantagens</button>
+          <button type="button" onClick={() => scrollTo("como")}>Processo</button>
+          <button type="button" onClick={() => scrollTo("modalidades")}>Modalidades</button>
+          <button
+            type="button"
+            className="mobile-menu-cta"
+            onClick={() => { setMenuOpen(false); router.push("/envie-seu-projeto" as Route); }}
+          >
+            Enviar projeto
+          </button>
+        </div>
+      )}
 
       {/* ── WA FLOAT ── */}
       <a className="wa-float" href={`https://wa.me/${WA}?text=Olá!%20Vim%20pelo%20site%20da%20IMOBI.`} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp IMOBI"><WaIcon /></a>
@@ -224,12 +248,8 @@ export default function LandingPage() {
 
             {activeTab === "criar" && (
               <form className="modal-form active" onSubmit={handleCadastro}>
-                <div className="form-group"><label className="form-label">Nome completo</label><input type="text" className="form-input" placeholder="Seu nome" value={cadNome} onChange={e => setCadNome(e.target.value)} required /></div>
-                <div className="form-group"><label className="form-label">CPF</label><input type="text" className="form-input" placeholder="000.000.000-00" value={cadCpf} onChange={e => setCadCpf(e.target.value)} required /></div>
-                <div className="modal-form-row">
-                  <div className="form-group"><label className="form-label">E-mail</label><input type="email" className="form-input" placeholder="seu@email.com.br" value={cadEmail} onChange={e => setCadEmail(e.target.value)} required /></div>
-                  <div className="form-group"><label className="form-label">WhatsApp</label><input type="tel" className="form-input" placeholder="(11) 99999-9999" value={cadTelefone} onChange={e => setCadTelefone(e.target.value)} required /></div>
-                </div>
+                <div className="form-group"><label className="form-label">Nome completo</label><input type="text" className="form-input" placeholder="Seu nome" value={cadNome} onChange={e => setCadNome(e.target.value)} required minLength={3} /></div>
+                <div className="form-group"><label className="form-label">E-mail</label><input type="email" className="form-input" placeholder="seu@email.com.br" value={cadEmail} onChange={e => setCadEmail(e.target.value)} required /></div>
                 <div className="form-group" style={{ position: "relative" }}>
                   <label className="form-label">Senha</label>
                   <input type={showCadPass ? "text" : "password"} className="form-input" placeholder="Mín. 8 chars, 1 maiúscula, 1 número" value={cadSenha} onChange={e => setCadSenha(e.target.value)} required style={{ paddingRight: "2.5rem" }} />
@@ -536,7 +556,8 @@ function WaIcon({ size = 26, color = "white" }: { size?: number; color?: string 
 
 function StatCounter({ value, prefix = "", suffix = "" }: { value: number; prefix?: string; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [display, setDisplay] = useState(0);
+  // Valor final no SSR/HTML inicial — evita crawlers e first paint com R$0.
+  const [display, setDisplay] = useState(value);
 
   useEffect(() => {
     const el = ref.current;
@@ -550,6 +571,7 @@ function StatCounter({ value, prefix = "", suffix = "" }: { value: number; prefi
         entries.forEach(e => {
           if (!e.isIntersecting) return;
           obs.disconnect();
+          setDisplay(0);
           const duration = 1400;
           const start = performance.now();
           function tick(now: number) {

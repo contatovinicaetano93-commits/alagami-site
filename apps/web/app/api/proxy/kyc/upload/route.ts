@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     method: "POST",
     body: formData,
     headers: token ? { Authorization: `Bearer ${token}` } : {},
-    wakeFirst: true,
+    origin: req.nextUrl.origin,
   });
 
   if (!res) {

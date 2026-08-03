@@ -1,5 +1,5 @@
 import { getApiV1Fallbacks } from '@/lib/api-base';
-import { RESILIENCE_TIMEOUTS, sleep, wakeApiHealth } from '@/lib/resilience';
+import { RESILIENCE_TIMEOUTS, sleep } from '@/lib/resilience';
 
 export type FetchApiWithRetryOptions = {
   path: string;
@@ -7,26 +7,28 @@ export type FetchApiWithRetryOptions = {
   body?: string | FormData | ArrayBuffer | Blob;
   headers?: Record<string, string>;
   maxAttemptsPerApi?: number;
+  /** @deprecated API é same-origin — wake do Render não é mais necessário. */
   wakeFirst?: boolean;
+  /** Origin absoluto (ex: req.nextUrl.origin) para fetch server-side. */
+  origin?: string;
 };
 
 /**
- * Chamada à API com wake + retry (Render free tier demora ~60–90s para acordar).
+ * Chamada à API embutida com retry curto.
+ * No servidor, usa URL absoluta (Node não resolve paths relativos).
  */
 export async function fetchApiWithRetry({
   path,
   method = 'GET',
   body,
   headers = {},
-  maxAttemptsPerApi = 5,
-  wakeFirst = true,
+  maxAttemptsPerApi = 3,
+  origin,
 }: FetchApiWithRetryOptions): Promise<Response | null> {
-  const apis = getApiV1Fallbacks();
+  const apis = getApiV1Fallbacks(origin);
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
 
   for (const api of apis) {
-    if (wakeFirst) await wakeApiHealth(api);
-
     for (let attempt = 0; attempt < maxAttemptsPerApi; attempt++) {
       const hasBody =
         body !== undefined && method !== "GET" && method !== "HEAD";
@@ -39,7 +41,7 @@ export async function fetchApiWithRetry({
       }).catch(() => null);
 
       if (!res) {
-        await sleep(2500 * (attempt + 1));
+        await sleep(400 * (attempt + 1));
         continue;
       }
 
@@ -48,8 +50,7 @@ export async function fetchApiWithRetry({
       }
 
       if (res.status >= 500 || res.status === 503 || res.status === 502 || res.status === 504) {
-        await wakeApiHealth(api);
-        await sleep(3000 * (attempt + 1));
+        await sleep(500 * (attempt + 1));
         continue;
       }
 

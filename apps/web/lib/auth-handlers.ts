@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getApiV1Fallbacks } from '@/lib/api-base';
-import { RESILIENCE_TIMEOUTS, sleep, wakeApiHealth } from '@/lib/resilience';
+import { getApiV1AbsoluteBase } from '@/lib/api-base';
+import { RESILIENCE_TIMEOUTS, sleep } from '@/lib/resilience';
 
 const COOKIE_OPTS = {
   httpOnly: true,
@@ -14,32 +14,31 @@ export const maxDuration = 60;
 async function postAuth(
   path: 'login' | 'registrar',
   body: string,
+  req: NextRequest,
 ): Promise<Response | null> {
-  const apis = getApiV1Fallbacks();
+  // API embutida no Next — fetch server-side precisa de URL absoluta.
+  const api = getApiV1AbsoluteBase(req.nextUrl.origin);
 
-  for (const api of apis) {
-    await wakeApiHealth(api, 20_000);
-    for (let attempt = 0; attempt < 4; attempt++) {
-      const res = await fetch(`${api}/auth/${path}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body,
-        cache: 'no-store',
-        signal: AbortSignal.timeout(RESILIENCE_TIMEOUTS.wakeHealth),
-      }).catch(() => null);
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const res = await fetch(`${api}/auth/${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+      cache: 'no-store',
+      signal: AbortSignal.timeout(RESILIENCE_TIMEOUTS.login),
+    }).catch(() => null);
 
-      if (!res) {
-        await sleep(2000);
-        continue;
-      }
-      if (res.status === 401 || res.status === 400 || res.status === 409) return res;
-      if (res.ok) return res;
-      if (res.status >= 500 || res.status === 503) {
-        await sleep(2500);
-        continue;
-      }
-      return res;
+    if (!res) {
+      await sleep(400 * (attempt + 1));
+      continue;
     }
+    if (res.status === 401 || res.status === 400 || res.status === 409) return res;
+    if (res.ok) return res;
+    if (res.status >= 500 || res.status === 503) {
+      await sleep(600 * (attempt + 1));
+      continue;
+    }
+    return res;
   }
   return null;
 }
@@ -94,11 +93,11 @@ export async function handleLoginPost(req: NextRequest): Promise<NextResponse> {
   const body = await req.json().catch(() => null);
   const payload = JSON.stringify(body);
 
-  const res = await postAuth('login', payload);
+  const res = await postAuth('login', payload, req);
 
   if (!res) {
     return NextResponse.json(
-      { message: 'Servidor acordando — aguarde 30s e tente novamente.' },
+      { message: 'Não foi possível autenticar. Tente novamente em instantes.' },
       { status: 503 },
     );
   }
@@ -109,7 +108,7 @@ export async function handleLoginPost(req: NextRequest): Promise<NextResponse> {
     const apiMsg = data.message ?? data.error;
     const message =
       res.status === 503 || res.status === 502
-        ? 'API acordando — aguarde 30–60s e tente de novo.'
+        ? 'API temporariamente indisponível. Tente de novo em instantes.'
         : res.status === 500
           ? 'Erro interno na API. Tente novamente em 1 minuto.'
           : (apiMsg ?? `Erro ${res.status}`);
@@ -135,16 +134,16 @@ export async function handleLoginPost(req: NextRequest): Promise<NextResponse> {
   return response;
 }
 
-/** Cadastro com wake + retry — mesmo padrão do login. */
+/** Cadastro — mesmo padrão do login (API same-origin). */
 export async function handleRegisterPost(req: NextRequest): Promise<NextResponse> {
   const body = await req.json().catch(() => null);
   const payload = JSON.stringify(body);
 
-  const res = await postAuth('registrar', payload);
+  const res = await postAuth('registrar', payload, req);
 
   if (!res) {
     return NextResponse.json(
-      { message: 'Servidor acordando — aguarde 1 minuto e tente novamente.' },
+      { message: 'Não foi possível criar a conta. Tente novamente em instantes.' },
       { status: 503 },
     );
   }
@@ -155,7 +154,7 @@ export async function handleRegisterPost(req: NextRequest): Promise<NextResponse
     const apiMsg = data.message ?? data.error;
     const message =
       res.status === 503 || res.status === 502
-        ? 'API acordando — aguarde 30–60s e tente de novo.'
+        ? 'API temporariamente indisponível. Tente de novo em instantes.'
         : (apiMsg ?? `Erro ${res.status}`);
     return NextResponse.json({ message }, { status: res.status });
   }
@@ -179,12 +178,18 @@ export async function handleRegisterPost(req: NextRequest): Promise<NextResponse
   return response;
 }
 
-export async function handleWakeGet(): Promise<NextResponse> {
-  for (const api of getApiV1Fallbacks()) {
-    const res = await wakeApiHealth(api);
-    if (res?.ok) {
+export async function handleWakeGet(req?: NextRequest): Promise<NextResponse> {
+  const api = getApiV1AbsoluteBase(req?.nextUrl.origin);
+  try {
+    const res = await fetch(`${api}/health`, {
+      cache: 'no-store',
+      signal: AbortSignal.timeout(RESILIENCE_TIMEOUTS.ping),
+    });
+    if (res.ok) {
       return NextResponse.json({ ok: true, status: res.status });
     }
+  } catch {
+    /* fall through */
   }
   return NextResponse.json({ ok: false }, { status: 503 });
 }

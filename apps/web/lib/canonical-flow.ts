@@ -28,6 +28,8 @@ export const PUBLIC_MARKETING_PATHS = [
   "/contato",
   "/simulador",
   "/envie-seu-projeto",
+  "/robots.txt",
+  "/sitemap.xml",
 ] as const;
 
 /** Rotas de conta — sempre acessíveis com sessão válida. */
