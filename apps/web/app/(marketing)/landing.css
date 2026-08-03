@@ -365,7 +365,7 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
   height: min(62vh, 520px);
   border-radius: 20px;
   overflow: hidden;
-  background: #15243f;
+  background: #1a2744;
   border: 1px solid rgba(255,255,255,0.1);
   box-shadow: 0 24px 60px rgba(0,0,0,0.28);
   animation: hero3dIn 1s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -577,7 +577,7 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
   border-radius: 18px;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.1);
-  background: #15243f;
+  background: #1a2744;
 }
 .como-3d-fallback {
   width: 100%;

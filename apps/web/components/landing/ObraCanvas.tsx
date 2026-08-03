@@ -1,15 +1,13 @@
 "use client";
 
-import { ContactShadows } from "@react-three/drei";
-import { Canvas, useThree } from "@react-three/fiber";
+import { ContactShadows, Environment } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useState, type ReactNode } from "react";
 import {
   ACESFilmicToneMapping,
   PCFShadowMap,
-  PMREMGenerator,
   SRGBColorSpace,
 } from "three";
-import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { ObraStageScene } from "./ObraStageScene";
 
 export type ObraCanvasProps = {
@@ -21,52 +19,30 @@ export type ObraCanvasProps = {
   children?: ReactNode;
 };
 
-/** Reflexões locais sem HDR externo — vidro e aço ficam mais reais. */
-function LocalEnvironment() {
-  const { gl, scene } = useThree();
-
-  useEffect(() => {
-    const pmrem = new PMREMGenerator(gl);
-    const env = new RoomEnvironment();
-    const rt = pmrem.fromScene(env, 0.04);
-    scene.environment = rt.texture;
-    scene.environmentIntensity = 1.15;
-    return () => {
-      scene.environment = null;
-      rt.dispose();
-      pmrem.dispose();
-      env.dispose();
-    };
-  }, [gl, scene]);
-
-  return null;
-}
-
 function SceneAtmosphere({ compact }: { compact: boolean }) {
   return (
     <>
-      <LocalEnvironment />
-      <color attach="background" args={["#15243f"]} />
-      <hemisphereLight args={["#e8f1ff", "#6a6256", 0.95]} />
-      <ambientLight intensity={0.42} color="#f2f6fb" />
+      <color attach="background" args={["#1a2744"]} />
+      <Environment files="/3d/hdri/sky.hdr" background={false} environmentIntensity={0.85} />
+      <hemisphereLight args={["#dce9ff", "#6b6254", 0.55]} />
+      <ambientLight intensity={0.28} color="#eef3f8" />
       <directionalLight
         castShadow
-        position={[7, 12, 5]}
-        intensity={compact ? 2.0 : 2.5}
-        color="#fff6e8"
+        position={[8, 14, 6]}
+        intensity={compact ? 2.2 : 2.8}
+        color="#fff3df"
         shadow-mapSize={compact ? [1024, 1024] : [2048, 2048]}
         shadow-camera-near={1}
-        shadow-camera-far={30}
-        shadow-camera-left={-8}
-        shadow-camera-right={8}
-        shadow-camera-top={10}
+        shadow-camera-far={32}
+        shadow-camera-left={-9}
+        shadow-camera-right={9}
+        shadow-camera-top={11}
         shadow-camera-bottom={-7}
-        shadow-bias={-0.0003}
+        shadow-bias={-0.00025}
       />
-      <directionalLight position={[-6, 5, -3]} intensity={0.85} color="#a8c4ff" />
-      <directionalLight position={[0, 4, -7]} intensity={0.45} color="#ffd2a8" />
-      <pointLight position={[0, 3.2, 2.5]} intensity={0.7} color="#ffe8c8" distance={14} />
-      <fog attach="fog" args={["#15243f", compact ? 14 : 16, compact ? 32 : 38]} />
+      <directionalLight position={[-7, 4, -4]} intensity={0.55} color="#9ec0ff" />
+      <directionalLight position={[2, 3, -8]} intensity={0.35} color="#ffc9a0" />
+      <fog attach="fog" args={["#1a2744", compact ? 13 : 15, compact ? 30 : 36]} />
     </>
   );
 }
@@ -90,24 +66,24 @@ export default function ObraCanvas({
       <Canvas
         shadows
         camera={{
-          position: compact ? [3.8, 2.7, 4.7] : [4.4, 3.1, 5.3],
-          fov: compact ? 40 : 34,
+          position: compact ? [3.9, 2.75, 4.8] : [4.5, 3.15, 5.4],
+          fov: compact ? 40 : 33,
           near: 0.1,
           far: 60,
         }}
-        dpr={compact ? [1, 1.5] : [1, 1.75]}
+        dpr={compact ? [1, 1.5] : [1, 1.85]}
         gl={{
           antialias: true,
           alpha: false,
           powerPreference: "high-performance",
           toneMapping: ACESFilmicToneMapping,
-          toneMappingExposure: 1.25,
+          toneMappingExposure: 1.05,
           outputColorSpace: SRGBColorSpace,
         }}
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true;
           gl.shadowMap.type = PCFShadowMap;
-          gl.setClearColor("#15243f", 1);
+          gl.setClearColor("#1a2744", 1);
         }}
         style={{ width: "100%", height: "100%", display: "block" }}
       >
@@ -116,11 +92,11 @@ export default function ObraCanvas({
           <ObraStageScene progress={progress} idleSpin={idleSpin} />
           <ContactShadows
             position={[0, -1.145, 0]}
-            opacity={0.38}
+            opacity={0.42}
             scale={14}
-            blur={2.2}
-            far={5.5}
-            color="#060a14"
+            blur={2.4}
+            far={6}
+            color="#050810"
           />
           {children}
         </Suspense>
