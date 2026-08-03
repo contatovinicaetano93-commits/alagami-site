@@ -365,11 +365,8 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
   height: min(62vh, 520px);
   border-radius: 20px;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 50% 70%, rgba(74, 222, 128, 0.12) 0%, transparent 55%),
-    radial-gradient(ellipse at 70% 20%, rgba(27, 79, 216, 0.18) 0%, transparent 50%),
-    rgba(8, 16, 40, 0.35);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: #15243f;
+  border: 1px solid rgba(255,255,255,0.1);
   box-shadow: 0 24px 60px rgba(0,0,0,0.28);
   animation: hero3dIn 1s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -579,10 +576,8 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
   height: min(52vh, 420px);
   border-radius: 18px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.08);
-  background:
-    radial-gradient(ellipse at 50% 80%, rgba(74, 222, 128, 0.1) 0%, transparent 50%),
-    rgba(8, 16, 40, 0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+  background: #15243f;
 }
 .como-3d-fallback {
   width: 100%;

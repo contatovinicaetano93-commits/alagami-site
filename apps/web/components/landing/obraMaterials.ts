@@ -83,24 +83,24 @@ function toMap(
   return tex;
 }
 
-/** Concreto com agregado e junta de forma. */
+/** Concreto com agregado e junta de forma (contraste alto para ler no canvas). */
 export function makeConcreteMap(): CanvasTexture {
   const canvas = fillNoise(512, (x, y, n) => {
-    const aggregate = hash2(x * 0.7, y * 0.7) > 0.92 ? 22 : 0;
-    const form = ((x + y * 0.15) % 64 < 1.2 ? -18 : 0) + ((y + x * 0.08) % 96 < 1 ? -10 : 0);
-    const base = 156 + n * 38 + aggregate + form;
+    const aggregate = hash2(x * 0.7, y * 0.7) > 0.9 ? 38 : 0;
+    const form = ((x + y * 0.15) % 64 < 1.6 ? -32 : 0) + ((y + x * 0.08) % 96 < 1.2 ? -18 : 0);
+    const base = 140 + n * 55 + aggregate + form;
     return [
       MathUtils.clamp(base, 0, 255),
-      MathUtils.clamp(base * 0.98, 0, 255),
-      MathUtils.clamp(base * 0.94, 0, 255),
+      MathUtils.clamp(base * 0.97, 0, 255),
+      MathUtils.clamp(base * 0.92, 0, 255),
     ];
   });
   const ctx = canvas.getContext("2d");
   if (ctx) {
-    ctx.globalAlpha = 0.06;
-    for (let i = 0; i < 40; i++) {
+    ctx.globalAlpha = 0.12;
+    for (let i = 0; i < 70; i++) {
       ctx.fillStyle = i % 2 ? "#fff" : "#000";
-      ctx.fillRect(Math.random() * 512, Math.random() * 512, 2 + Math.random() * 18, 1);
+      ctx.fillRect(Math.random() * 512, Math.random() * 512, 2 + Math.random() * 22, 1.5);
     }
     ctx.globalAlpha = 1;
   }
@@ -159,16 +159,16 @@ export function makeWoodMap(): CanvasTexture {
 
 export const PALETTE = {
   navy: new Color("#0C1A3D"),
-  concrete: new Color("#B4BAC2"),
-  warmConcrete: new Color("#C8BBA8"),
-  steel: new Color("#8A93A3"),
-  darkSteel: new Color("#3A4250"),
-  glass: new Color("#9EB8CE"),
-  glassTint: new Color("#6FA0C0"),
+  concrete: new Color("#C4CAD2"),
+  warmConcrete: new Color("#D2C4B0"),
+  steel: new Color("#9AA3B2"),
+  darkSteel: new Color("#4A5260"),
+  glass: new Color("#B4D0E4"),
+  glassTint: new Color("#7FB0D0"),
   mint: new Color("#4ADE80"),
   mintDeep: new Color("#16A34A"),
-  dirt: new Color("#5C635A"),
-  wood: new Color("#8B6B4A"),
-  warning: new Color("#E8B84A"),
-  asphalt: new Color("#4A4F56"),
+  dirt: new Color("#7A8276"),
+  wood: new Color("#A07A54"),
+  warning: new Color("#F0C45A"),
+  asphalt: new Color("#5A6068"),
 } as const;

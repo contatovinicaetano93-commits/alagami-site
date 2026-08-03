@@ -38,7 +38,7 @@ type ProcessoScrubProps = {
 
 export function ProcessoScrub({ enable3d }: ProcessoScrubProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const [progress, setProgress] = useState(0.15);
+  const [progress, setProgress] = useState(0.28);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export function ProcessoScrub({ enable3d }: ProcessoScrubProps) {
           ? Math.min(Math.max(-rect.top, 0), total)
           : Math.min(Math.max(viewH - rect.top, 0), total);
       const p = scrolled / total;
-      setProgress(0.1 + p * 0.85);
+      setProgress(0.18 + p * 0.78);
       setActive(Math.min(STEPS.length - 1, Math.floor(p * STEPS.length * 0.999)));
     }
 

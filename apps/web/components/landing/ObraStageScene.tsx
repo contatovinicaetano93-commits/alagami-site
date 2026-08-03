@@ -40,22 +40,22 @@ function GlassPane({
   height: number;
   depth?: number;
 }) {
+  // Vidro tipado (sem transmission) — legível em WebGL software e com env map.
   return (
-    <mesh castShadow>
+    <mesh>
       <boxGeometry args={[width, height, depth]} />
       <meshPhysicalMaterial
-        color={PALETTE.glass}
-        roughness={0.06}
-        metalness={0.05}
-        transmission={0.72}
-        thickness={0.4}
-        ior={1.5}
+        color={PALETTE.glassTint}
+        roughness={0.18}
+        metalness={0.35}
         transparent
-        opacity={1}
-        reflectivity={0.9}
+        opacity={0.82}
+        reflectivity={1}
         clearcoat={1}
-        clearcoatRoughness={0.08}
-        envMapIntensity={1.4}
+        clearcoatRoughness={0.2}
+        envMapIntensity={1.8}
+        emissive={PALETTE.glass}
+        emissiveIntensity={0.08}
         side={DoubleSide}
       />
     </mesh>
@@ -279,11 +279,12 @@ function TowerCrane({ metal }: { metal: ReturnType<typeof makeMetalMap> }) {
         <boxGeometry args={[0.28, 0.16, 0.02]} />
         <meshPhysicalMaterial
           color={PALETTE.glassTint}
-          roughness={0.1}
-          metalness={0.1}
-          transmission={0.5}
-          thickness={0.2}
+          roughness={0.15}
+          metalness={0.2}
           transparent
+          opacity={0.7}
+          clearcoat={0.8}
+          envMapIntensity={1.2}
         />
       </mesh>
 
