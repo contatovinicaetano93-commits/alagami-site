@@ -108,6 +108,14 @@ export default function LandingPage() {
   }, [modalOpen, menuOpen]);
 
   useEffect(() => {
+    function onResize() {
+      if (window.innerWidth > 768) setMenuOpen(false);
+    }
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } }),
       { threshold: 0.12, rootMargin: '0px 0px -32px 0px' },
@@ -566,26 +574,43 @@ function StatCounter({ value, prefix = "", suffix = "" }: { value: number; prefi
       setDisplay(value);
       return;
     }
+
+    const target = el.closest(".stat-tile") ?? el;
+
+    function animate() {
+      const duration = 1400;
+      const start = performance.now();
+      function tick(now: number) {
+        const t = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        setDisplay(Math.round(eased * value));
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach(e => {
           if (!e.isIntersecting) return;
           obs.disconnect();
-          setDisplay(0);
-          const duration = 1400;
-          const start = performance.now();
-          function tick(now: number) {
-            const t = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - t, 3);
-            setDisplay(Math.round(eased * value));
-            if (t < 1) requestAnimationFrame(tick);
-          }
-          requestAnimationFrame(tick);
+          // Já está em 0 (reset off-screen) — anima sem flash do valor final.
+          animate();
         });
       },
       { threshold: 0.12, rootMargin: "0px 0px -32px 0px" },
     );
-    obs.observe(el.closest(".stat-tile") ?? el);
+
+    // Se já está visível no load, mantém o valor SSR (animar resetaria para 0 e piscaria).
+    // Se está off-screen, reseta para 0 em segurança e anima ao entrar na viewport.
+    const rect = target.getBoundingClientRect();
+    const alreadyInView = rect.top < window.innerHeight - 32 && rect.bottom > 0;
+    if (alreadyInView) {
+      return;
+    }
+
+    setDisplay(0);
+    obs.observe(target);
     return () => obs.disconnect();
   }, [value]);
 
