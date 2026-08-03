@@ -32,8 +32,7 @@ async function proxy(req: NextRequest, pathParts: string[], method: string) {
     method,
     body,
     headers,
-    // Jornada é chamada em toda navegação — não acordar API a cada GET (evita 429).
-    wakeFirst: method === 'GET' && pathParts[0] === 'jornada' ? false : true,
+    origin: req.nextUrl.origin,
   });
 
   if (!res) {

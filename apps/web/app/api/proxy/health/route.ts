@@ -1,12 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { fetchApiWithRetry } from '@/lib/fetch-api-with-retry';
 
 export const maxDuration = 30;
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const res = await fetchApiWithRetry({
     path: '/health',
-    wakeFirst: true,
+    origin: req.nextUrl.origin,
     maxAttemptsPerApi: 3,
   });
 
