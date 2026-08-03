@@ -58,7 +58,14 @@ export default function LandingPage() {
 
   const heroRef = useRef<HTMLElement>(null);
 
-  useEffect(() => { setIsMobile(window.innerWidth <= 768); }, []);
+  useEffect(() => {
+    function detect() {
+      setIsMobile(window.innerWidth <= 768);
+    }
+    detect();
+    window.addEventListener("resize", detect);
+    return () => window.removeEventListener("resize", detect);
+  }, []);
 
   useEffect(() => {
     if (isMobile) return;

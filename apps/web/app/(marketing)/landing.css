@@ -339,6 +339,7 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
   }
 }
 .hero-content { display: flex; flex-direction: column; }
+
 .hero-badge {
   display: inline-flex; align-items: center; gap: 0.5rem; align-self: flex-start;
   background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.65);
@@ -487,9 +488,7 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
 /* ── COMO FUNCIONA ── */
 .como { background: var(--navy); padding: 6rem 3rem; }
 .como-inner {
-  max-width: 1200px; margin: 0 auto;
-  display: grid; grid-template-columns: 1fr 1.4fr;
-  gap: 6rem; align-items: start;
+  max-width: 1200px; margin: 0 auto; width: 100%;
 }
 .como-ey { color: rgba(255,255,255,0.45); }
 .como-h2 {
@@ -498,6 +497,7 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
   margin-bottom: 0;
 }
 .como-h2 em { font-style: normal; color: var(--mint); }
+
 .steps { display: flex; flex-direction: column; position: relative; }
 .steps-track {
   position: absolute; left: 1.25rem; top: 0.75rem; bottom: 0.75rem; width: 2px;
@@ -510,12 +510,14 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
 .step {
   display: flex; gap: 1.5rem; position: relative; z-index: 1;
   padding: 1.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+  transition: opacity 0.3s, transform 0.3s;
 }
 .step:last-child { border-bottom: none; }
 .step-n {
   font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
   font-size: 3rem; color: rgba(255,255,255,0.1); line-height: 1;
   flex-shrink: 0; width: 2.5rem;
+  transition: color 0.3s;
 }
 .step-t { font-size: 0.9rem; font-weight: 600; color: var(--white); margin-bottom: 0.4rem; }
 .step-d { font-size: 0.82rem; color: rgba(255,255,255,0.48); line-height: 1.75; font-weight: 300; }
@@ -811,7 +813,6 @@ footer { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.07); 
   .step-t { font-size: 0.85rem; line-height: 1.35; }
 
   .como { padding: 4rem 1.25rem; }
-  .como-inner { grid-template-columns: 1fr; gap: 2.5rem; }
 
   .modalidades { padding: 4rem 1.25rem; }
   .mod-h2 { font-size: clamp(2rem, 8vw, 2.75rem); }
