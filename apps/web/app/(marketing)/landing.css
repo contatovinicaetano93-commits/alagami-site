@@ -537,11 +537,24 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
 
 /* ── COMO FUNCIONA ── */
 .como { background: var(--navy); padding: 6rem 3rem; }
-.como-scrub { padding-bottom: 2rem; }
-.como-inner {
-  max-width: 1200px; margin: 0 auto;
+.como-scrub {
+  padding: 0;
+  height: 280vh;
+  position: relative;
 }
-.como-scrub-inner { display: flex; flex-direction: column; gap: 3rem; }
+.como-scrub-pin {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 5.5rem 3rem 3rem;
+  box-sizing: border-box;
+}
+.como-inner {
+  max-width: 1200px; margin: 0 auto; width: 100%;
+}
+.como-scrub-inner { display: flex; flex-direction: column; gap: 2rem; width: 100%; }
 .como-ey { color: rgba(255,255,255,0.45); }
 .como-h2 {
   font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 600;
@@ -553,13 +566,10 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
 .como-scrub-grid {
   display: grid;
   grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.2fr);
-  gap: 3.5rem;
-  align-items: start;
-  min-height: 180vh;
+  gap: 3rem;
+  align-items: center;
 }
-.como-scrub-sticky {
-  position: sticky;
-  top: 5.5rem;
+.como-scrub-visual {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
@@ -937,14 +947,15 @@ footer { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.07); 
   .step-t { font-size: 0.85rem; line-height: 1.35; }
 
   .como { padding: 4rem 1.25rem; }
+  .como-scrub { height: auto; }
+  .como-scrub-pin {
+    position: relative;
+    min-height: 0;
+    padding: 4rem 1.25rem 3rem;
+  }
   .como-scrub-grid {
     grid-template-columns: 1fr;
     gap: 1.75rem;
-    min-height: 0;
-  }
-  .como-scrub-sticky {
-    position: relative;
-    top: auto;
   }
   .como-3d-canvas,
   .como-3d-fallback {

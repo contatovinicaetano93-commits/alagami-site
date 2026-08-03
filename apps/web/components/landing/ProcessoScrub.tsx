@@ -62,9 +62,8 @@ export function ProcessoScrub({ enable3d }: ProcessoScrubProps) {
           ? Math.min(Math.max(-rect.top, 0), total)
           : Math.min(Math.max(viewH - rect.top, 0), total);
       const p = scrolled / total;
-      const mapped = 0.1 + p * 0.85;
-      setProgress(mapped);
-      setActive(Math.min(STEPS.length - 1, Math.floor(p * STEPS.length)));
+      setProgress(0.1 + p * 0.85);
+      setActive(Math.min(STEPS.length - 1, Math.floor(p * STEPS.length * 0.999)));
     }
 
     if (reduce) {
@@ -84,6 +83,7 @@ export function ProcessoScrub({ enable3d }: ProcessoScrubProps) {
 
   return (
     <section className="como como-scrub" id="como" ref={sectionRef}>
+<<<<<<< HEAD
       <div className="como-inner como-scrub-inner">
         <div className="como-head reveal">
           <p className="eyebrow como-ey">Processo</p>
@@ -138,9 +138,59 @@ export function ProcessoScrub({ enable3d }: ProcessoScrubProps) {
                 <div>
                   <p className="step-t">{s.t}</p>
                   <p className="step-d">{s.d}</p>
+=======
+      <div className="como-scrub-pin">
+        <div className="como-inner como-scrub-inner">
+          <div className="como-head">
+            <p className="eyebrow como-ey">Processo</p>
+            <h2 className="como-h2">
+              Do pedido ao capital
+              <br />
+              <em>em dias, não meses.</em>
+            </h2>
+          </div>
+
+          <div className="como-scrub-grid">
+            <div className="como-scrub-visual">
+              {enable3d ? (
+                <ObraCanvas progress={progress} className="como-3d-canvas" compact />
+              ) : (
+                <div className="como-3d-fallback" aria-hidden>
+                  <div className="como-3d-fallback-stack">
+                    {STEPS.map((s, i) => (
+                      <span
+                        key={s.n}
+                        className={`como-3d-fallback-bar${i <= active ? " on" : ""}`}
+                        style={{ height: `${18 + i * 10}%` }}
+                      />
+                    ))}
+                  </div>
+>>>>>>> d580e466 (fix(web): pin processo 3D+steps no viewport durante scrub)
                 </div>
+              )}
+              <p className="como-scrub-stage">
+                <span className="como-scrub-stage-n">{STEPS[active].n}</span>
+                {STEPS[active].stage}
+              </p>
+              <div className="como-scrub-meter" aria-hidden>
+                <div className="como-scrub-meter-fill" style={{ width: `${progress * 100}%` }} />
               </div>
-            ))}
+            </div>
+
+            <div className="steps steps-scrub">
+              {STEPS.map((s, i) => (
+                <div
+                  className={`step scrub-step${i === active ? " active" : ""}${i < active ? " done" : ""}`}
+                  key={s.n}
+                >
+                  <span className="step-n">{s.n}</span>
+                  <div>
+                    <p className="step-t">{s.t}</p>
+                    <p className="step-d">{s.d}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
