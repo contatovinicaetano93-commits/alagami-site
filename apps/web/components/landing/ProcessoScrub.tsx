@@ -45,13 +45,22 @@ export function ProcessoScrub({ enable3d }: ProcessoScrubProps) {
     const el = sectionRef.current;
     if (!el) return;
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
     function update() {
       if (!el) return;
       const rect = el.getBoundingClientRect();
-      const total = Math.max(el.offsetHeight - window.innerHeight, 1);
-      const scrolled = Math.min(Math.max(-rect.top, 0), total);
+      const viewH = window.innerHeight;
+      const pinRange = el.offsetHeight - viewH;
+      // Tall sections: scrub while pinned. Short sections (e.g. mobile):
+      // map progress across the section traveling through the viewport.
+      const total = pinRange > 0 ? pinRange : el.offsetHeight + viewH;
+      const scrolled =
+        pinRange > 0
+          ? Math.min(Math.max(-rect.top, 0), total)
+          : Math.min(Math.max(viewH - rect.top, 0), total);
       const p = scrolled / total;
       const mapped = 0.1 + p * 0.85;
       setProgress(mapped);
@@ -88,7 +97,11 @@ export function ProcessoScrub({ enable3d }: ProcessoScrubProps) {
         <div className="como-scrub-grid">
           <div className="como-scrub-sticky">
             {enable3d ? (
-              <ObraCanvas progress={progress} className="como-3d-canvas" compact />
+              <ObraCanvas
+                progress={progress}
+                className="como-3d-canvas"
+                compact
+              />
             ) : (
               <div className="como-3d-fallback" aria-hidden>
                 <div className="como-3d-fallback-stack">
@@ -107,14 +120,20 @@ export function ProcessoScrub({ enable3d }: ProcessoScrubProps) {
               {STEPS[active].stage}
             </p>
             <div className="como-scrub-meter" aria-hidden>
-              <div className="como-scrub-meter-fill" style={{ width: `${progress * 100}%` }} />
+              <div
+                className="como-scrub-meter-fill"
+                style={{ width: `${progress * 100}%` }}
+              />
             </div>
           </div>
 
           <div className="steps steps-scrub">
             <div className="steps-track" aria-hidden />
             {STEPS.map((s, i) => (
-              <div className={`step scrub-step${i === active ? " active" : ""}${i < active ? " done" : ""}`} key={s.n}>
+              <div
+                className={`step scrub-step${i === active ? " active" : ""}${i < active ? " done" : ""}`}
+                key={s.n}
+              >
                 <span className="step-n">{s.n}</span>
                 <div>
                   <p className="step-t">{s.t}</p>

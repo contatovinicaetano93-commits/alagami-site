@@ -294,7 +294,7 @@ export default function LandingPage() {
           <div className="hero-glow hero-glow-1" />
           <div className="hero-glow hero-glow-2" />
         </div>
-        <div className="hero-inner hero-inner-split">
+        <div className={`hero-inner${enable3d && !isMobile ? " hero-inner-split" : ""}`}>
           <div className="hero-content">
             <div className="hero-badge"><span className="badge-dot" />Crédito desburocratizado · aprovação ágil</div>
             <h1 className="hero-h1">

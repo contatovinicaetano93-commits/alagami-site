@@ -12,16 +12,21 @@ type HeroObra3DProps = {
 export function HeroObra3D({ enabled }: HeroObra3DProps) {
   const [progress, setProgress] = useState(0.12);
   const [ready, setReady] = useState(false);
+  const [idleSpin, setIdleSpin] = useState(true);
 
   useEffect(() => {
     if (!enabled) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     setReady(true);
     if (reduce) {
+      setIdleSpin(false);
       setProgress(0.88);
       return;
     }
 
+    setIdleSpin(true);
     let raf = 0;
     const start = performance.now();
     const from = 0.08;
@@ -42,8 +47,14 @@ export function HeroObra3D({ enabled }: HeroObra3DProps) {
 
   return (
     <div className="hero-3d">
-      <ObraCanvas progress={progress} idleSpin className="hero-3d-canvas" />
-      <p className="hero-3d-caption">Liberação por etapa — a obra sobe com o capital</p>
+      <ObraCanvas
+        progress={progress}
+        idleSpin={idleSpin}
+        className="hero-3d-canvas"
+      />
+      <p className="hero-3d-caption">
+        Liberação por etapa — a obra sobe com o capital
+      </p>
     </div>
   );
 }
