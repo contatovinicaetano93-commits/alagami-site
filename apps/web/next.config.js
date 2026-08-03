@@ -6,11 +6,12 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  transpilePackages: ["@imbobi/core", "@imbobi/schemas", "@imbobi/ui"],
+  transpilePackages: ["@imbobi/core", "@imbobi/schemas", "@imbobi/ui", "three"],
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "**.amazonaws.com" },
       { protocol: "https", hostname: "**.r2.cloudflarestorage.com" },
+      { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
   experimental: {
