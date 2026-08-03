@@ -332,96 +332,14 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
   transition: transform 0.35s ease-out; will-change: transform;
 }
 @media (min-width: 769px) {
-  .hero-inner:not(.hero-inner-split) {
+  .hero-inner {
     max-width: min(58vw, 680px);
     margin-left: max(3rem, calc((100% - 1200px) / 2 + 3rem));
     margin-right: auto;
   }
-  .hero.hero-has-3d .hero-inner-split {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
-    gap: 2rem;
-    align-items: center;
-    padding: 0 3rem;
-    box-sizing: border-box;
-  }
-  .hero.hero-has-3d .hero-photo-dim {
-    opacity: 0.45;
-    filter: saturate(0.5) brightness(0.7);
-  }
-  .hero.hero-has-3d .hero-h1 {
-    font-size: clamp(3.4rem, 6.5vw, 6.5rem);
-  }
 }
 .hero-content { display: flex; flex-direction: column; }
 
-/* ── HERO 3D ── */
-.hero-3d {
-  position: relative;
-  width: 100%;
-  min-height: min(62vh, 520px);
-  height: min(62vh, 520px);
-  border-radius: 20px;
-  overflow: hidden;
-  background: #0e1628;
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 28px 70px rgba(0,0,0,0.4);
-  animation: hero3dIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-.hero-3d-cinema {
-  isolation: isolate;
-}
-.hero-3d-canvas { width: 100%; height: 100%; }
-.hero-3d-letterbox {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  box-shadow: inset 0 0 0 0 transparent;
-  background:
-    linear-gradient(
-      to bottom,
-      #000 0%,
-      #000 9%,
-      transparent 9.2%,
-      transparent 90.8%,
-      #000 91%,
-      #000 100%
-    );
-}
-.hero-3d-grade {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    radial-gradient(ellipse at 78% 28%, rgba(255, 140, 60, 0.22) 0%, transparent 42%),
-    radial-gradient(ellipse at 15% 85%, rgba(30, 70, 160, 0.16) 0%, transparent 48%),
-    linear-gradient(115deg, rgba(255,120,40,0.06), transparent 40%, rgba(40,80,160,0.08));
-  mix-blend-mode: soft-light;
-}
-.hero-3d-caption {
-  position: absolute;
-  left: 1rem; right: 1rem; bottom: 1.15rem;
-  z-index: 3;
-  font-size: 0.68rem; font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.62);
-  text-align: center;
-  pointer-events: none;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.55);
-}
-@keyframes hero3dIn {
-  from { opacity: 0; transform: translateY(22px) scale(0.985); filter: saturate(0.7); }
-  to   { opacity: 1; transform: none; filter: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-3d { animation: none; }
-  .hero-3d-grade { display: none; }
-}
 .hero-badge {
   display: inline-flex; align-items: center; gap: 0.5rem; align-self: flex-start;
   background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.65);
@@ -569,24 +487,9 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
 
 /* ── COMO FUNCIONA ── */
 .como { background: var(--navy); padding: 6rem 3rem; }
-.como-scrub {
-  padding: 0;
-  height: 280vh;
-  position: relative;
-}
-.como-scrub-pin {
-  position: sticky;
-  top: 0;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding: 5.5rem 3rem 3rem;
-  box-sizing: border-box;
-}
 .como-inner {
   max-width: 1200px; margin: 0 auto; width: 100%;
 }
-.como-scrub-inner { display: flex; flex-direction: column; gap: 2rem; width: 100%; }
 .como-ey { color: rgba(255,255,255,0.45); }
 .como-h2 {
   font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 600;
@@ -595,68 +498,7 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
 }
 .como-h2 em { font-style: normal; color: var(--mint); }
 
-.como-scrub-grid {
-  display: grid;
-  grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.2fr);
-  gap: 3rem;
-  align-items: center;
-}
-.como-scrub-visual {
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-.como-3d-canvas {
-  width: 100%;
-  height: min(52vh, 420px);
-  border-radius: 18px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: #0e1628;
-  box-shadow: inset 0 0 60px rgba(0,0,0,0.35);
-}
-.como-3d-fallback {
-  width: 100%;
-  height: min(40vh, 280px);
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(8, 16, 40, 0.55);
-  display: flex; align-items: flex-end; justify-content: center;
-  padding: 1.5rem;
-}
-.como-3d-fallback-stack {
-  display: flex; align-items: flex-end; gap: 0.55rem;
-  width: 70%; height: 70%;
-}
-.como-3d-fallback-bar {
-  flex: 1;
-  border-radius: 6px 6px 2px 2px;
-  background: rgba(255,255,255,0.1);
-  transition: background 0.35s, transform 0.35s;
-}
-.como-3d-fallback-bar.on {
-  background: linear-gradient(180deg, var(--mint), rgba(74,222,128,0.35));
-  transform: scaleY(1.02);
-}
-.como-scrub-stage {
-  display: flex; align-items: center; gap: 0.65rem;
-  font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.7);
-}
-.como-scrub-stage-n {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 800; font-size: 1.1rem; color: var(--mint);
-}
-.como-scrub-meter {
-  height: 3px; border-radius: 99px;
-  background: rgba(255,255,255,0.08); overflow: hidden;
-}
-.como-scrub-meter-fill {
-  height: 100%; background: var(--mint);
-  transition: width 0.12s linear;
-}
-
 .steps { display: flex; flex-direction: column; position: relative; }
-.steps-scrub { padding-top: 0.5rem; }
 .steps-track {
   position: absolute; left: 1.25rem; top: 0.75rem; bottom: 0.75rem; width: 2px;
   background: rgba(255,255,255,0.08); pointer-events: none;
@@ -671,13 +513,6 @@ body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--i
   transition: opacity 0.3s, transform 0.3s;
 }
 .step:last-child { border-bottom: none; }
-.scrub-step { opacity: 0.38; transform: translateX(0); }
-.scrub-step.active {
-  opacity: 1;
-  transform: translateX(4px);
-}
-.scrub-step.active .step-n { color: var(--mint); }
-.scrub-step.done { opacity: 0.62; }
 .step-n {
   font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
   font-size: 3rem; color: rgba(255,255,255,0.1); line-height: 1;
@@ -978,22 +813,6 @@ footer { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.07); 
   .step-t { font-size: 0.85rem; line-height: 1.35; }
 
   .como { padding: 4rem 1.25rem; }
-  .como-scrub { height: auto; }
-  .como-scrub-pin {
-    position: relative;
-    min-height: 0;
-    padding: 4rem 1.25rem 3rem;
-  }
-  .como-scrub-grid {
-    grid-template-columns: 1fr;
-    gap: 1.75rem;
-  }
-  .como-3d-canvas,
-  .como-3d-fallback {
-    height: 240px;
-  }
-  .scrub-step { opacity: 1; }
-  .scrub-step.active { transform: none; }
 
   .modalidades { padding: 4rem 1.25rem; }
   .mod-h2 { font-size: clamp(2rem, 8vw, 2.75rem); }

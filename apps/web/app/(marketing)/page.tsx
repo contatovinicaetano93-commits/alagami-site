@@ -6,8 +6,6 @@ import type { Route } from "next";
 import { redirectAfterLogin } from "@/lib/post-login-redirect";
 import { loginWithRetry } from "@/lib/login-with-retry";
 import { registerWithRetry } from "@/lib/register-with-retry";
-import { HeroObra3D } from "@/components/landing/HeroObra3D";
-import { ProcessoScrub } from "@/components/landing/ProcessoScrub";
 import "./landing.css";
 
 const WA = "5511993455589";
@@ -37,7 +35,6 @@ export default function LandingPage() {
   const router = useRouter();
   const [scrolled,   setScrolled]   = useState(false);
   const [isMobile,   setIsMobile]   = useState(false);
-  const [enable3d,   setEnable3d]   = useState(false);
   const [activeTab,  setActiveTab]  = useState("login");
   const [modalOpen,  setModalOpen]  = useState(false);
 
@@ -64,13 +61,6 @@ export default function LandingPage() {
   useEffect(() => {
     function detect() {
       setIsMobile(window.innerWidth <= 768);
-      try {
-        const c = document.createElement("canvas");
-        const gl = c.getContext("webgl") || c.getContext("experimental-webgl");
-        setEnable3d(Boolean(gl));
-      } catch {
-        setEnable3d(false);
-      }
     }
     detect();
     window.addEventListener("resize", detect);
@@ -274,9 +264,9 @@ export default function LandingPage() {
       )}
 
       {/* ── HERO ── */}
-      <section className={`hero${enable3d && !isMobile ? " hero-has-3d" : ""}`} ref={heroRef}>
+      <section className="hero" ref={heroRef}>
         <div className="hero-scene" aria-hidden>
-          <div className={`hero-photo-panel${enable3d && !isMobile ? " hero-photo-dim" : ""}`}>
+          <div className="hero-photo-panel">
             {HERO_PHOTOS.map((photo, i) => (
               <div
                 key={photo.src}
@@ -294,7 +284,7 @@ export default function LandingPage() {
           <div className="hero-glow hero-glow-1" />
           <div className="hero-glow hero-glow-2" />
         </div>
-        <div className={`hero-inner${enable3d && !isMobile ? " hero-inner-split" : ""}`}>
+        <div className="hero-inner">
           <div className="hero-content">
             <div className="hero-badge"><span className="badge-dot" />Crédito desburocratizado · aprovação ágil</div>
             <h1 className="hero-h1">
@@ -323,7 +313,6 @@ export default function LandingPage() {
               ))}
             </div>
           </div>
-          {!isMobile && <HeroObra3D enabled={enable3d} />}
         </div>
       </section>
 
@@ -381,8 +370,29 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── COMO FUNCIONA (scrub 3D) ── */}
-      <ProcessoScrub enable3d={enable3d} />
+      {/* ── COMO FUNCIONA ── */}
+      <section className="como" id="como">
+        <div className="como-inner">
+          <div className="como-head reveal">
+            <p className="eyebrow como-ey">Processo</p>
+            <h2 className="como-h2">Do pedido ao capital<br /><em>em dias, não meses.</em></h2>
+          </div>
+          <div className="steps">
+            <div className="steps-track" aria-hidden />
+            {[
+              { n:"01", t:"Você nos conta o projeto",           d:"Preencha o formulário. A equipe IMOBI retorna em até 24h para alinhar os próximos passos." },
+              { n:"02", t:"Análise desburocratizada em tempo recorde", d:"Avaliamos viabilidade com processo simplificado. Proposta com taxa, prazo e condições em tempo recorde — sem burocracia desnecessária." },
+              { n:"03", t:"Garantias e modalidades caso a caso", d:"Volume, cronograma e garantias definidas com nosso modelo próprio — diferente do padrão de mercado. Tudo documentado e transparente." },
+              { n:"04", t:"Capital no ritmo da obra",           d:"Liberações conforme avanço físico validado por vistoria técnica. Você recebe quando a obra avança." },
+            ].map((s, i) => (
+              <div className={`step reveal d${i + 1}`} key={s.n}>
+                <span className="step-n">{s.n}</span>
+                <div><p className="step-t">{s.t}</p><p className="step-d">{s.d}</p></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ── MODALIDADES ── */}
       <section className="modalidades" id="modalidades">

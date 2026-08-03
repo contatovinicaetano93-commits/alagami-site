@@ -33,11 +33,6 @@ export function middleware(request: NextRequest) {
 
   // API embutida cuida da própria auth (requireAuth/requireRole) e devolve 401/403 em JSON,
   // não faz sentido redirecionar pra /login aqui.
-  // Assets estáticos do hero 3D (texturas PBR / HDRI)
-  if (pathname.startsWith("/3d/")) {
-    return NextResponse.next();
-  }
-
   if (pathname.startsWith("/api/v1")) {
     return NextResponse.next();
   }
@@ -82,6 +77,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|3d/).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)",
   ],
 };
