@@ -26,16 +26,17 @@ export function HeroObra3D({ enabled }: HeroObra3DProps) {
       return;
     }
 
-    setIdleSpin(true);
+    setIdleSpin(false);
     let raf = 0;
     const start = performance.now();
     const from = 0.08;
-    const to = 0.9;
-    const duration = 1600;
+    const to = 0.78;
+    const duration = 3400;
 
     function tick(now: number) {
       const t = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
+      // ease-in-out cinematográfico
+      const eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       setProgress(from + (to - from) * eased);
       if (t < 1) raf = requestAnimationFrame(tick);
     }
@@ -46,12 +47,15 @@ export function HeroObra3D({ enabled }: HeroObra3DProps) {
   if (!enabled || !ready) return null;
 
   return (
-    <div className="hero-3d">
+    <div className="hero-3d hero-3d-cinema">
       <ObraCanvas
         progress={progress}
         idleSpin={idleSpin}
+        cinematic
         className="hero-3d-canvas"
       />
+      <div className="hero-3d-letterbox" aria-hidden />
+      <div className="hero-3d-grade" aria-hidden />
       <p className="hero-3d-caption">
         Liberação por etapa — a obra sobe com o capital
       </p>

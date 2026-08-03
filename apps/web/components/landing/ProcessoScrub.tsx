@@ -95,7 +95,12 @@ export function ProcessoScrub({ enable3d }: ProcessoScrubProps) {
           <div className="como-scrub-grid">
             <div className="como-scrub-visual">
               {enable3d ? (
-                <ObraCanvas progress={progress} className="como-3d-canvas" compact />
+                <ObraCanvas
+                  progress={progress}
+                  className="como-3d-canvas"
+                  compact
+                  cinematic
+                />
               ) : (
                 <div className="como-3d-fallback" aria-hidden>
                   <div className="como-3d-fallback-stack">

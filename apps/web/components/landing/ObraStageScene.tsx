@@ -378,7 +378,7 @@ function TowerCrane({ metal }: { metal: Maps["metal"] }) {
               roughness={0.35}
               metalness={0.42}
               emissive={PALETTE.mint}
-              emissiveIntensity={0.18}
+              emissiveIntensity={0.08}
               envMapIntensity={0.8}
             />
           </mesh>
@@ -428,11 +428,12 @@ export function ObraStageScene({ progress, idleSpin = false }: ObraStageScenePro
 
       const light = liberadoLights.current[i];
       if (light) {
-        const liberado = p > 0.7 && i <= Math.floor((p - 0.7) / 0.06);
+        const liberado = p > 0.82 && i <= Math.floor((p - 0.82) / 0.05);
         light.visible = liberado;
         const mat = light.material as MeshStandardMaterial;
         if (mat?.emissiveIntensity !== undefined) {
-          mat.emissiveIntensity = liberado ? 0.7 : 0;
+          // Sutil — evita look neon/cyberpunk no hero cinematográfico
+          mat.emissiveIntensity = liberado ? 0.22 : 0;
         }
       }
     }
@@ -647,7 +648,7 @@ export function ObraStageScene({ progress, idleSpin = false }: ObraStageScenePro
             <meshStandardMaterial
               color={PALETTE.mint}
               emissive={PALETTE.mint}
-              emissiveIntensity={0.3}
+              emissiveIntensity={0.12}
               roughness={0.32}
               metalness={0.3}
             />

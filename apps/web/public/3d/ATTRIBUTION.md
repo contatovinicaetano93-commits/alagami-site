@@ -9,6 +9,5 @@ Texturas PBR e HDRI de [Poly Haven](https://polyhaven.com) — licença **CC0** 
 | `textures/metal_*` | metal_plate |
 | `textures/wood_*` | wood_table_001 |
 | `hdri/sky.hdr` | kloofendal_43d_clear_puresky (1k) |
-| `hdri/studio.hdr` | studio_small_09 (1k) |
 
 Crédito não é obrigatório sob CC0; mantido aqui por transparência.
