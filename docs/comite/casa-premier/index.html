@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IMOBI — Teaser Casa Premier | Comitê do Fundo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0C1A3D;
+      --navy-deep: #071228;
+      --royal: #1B4FD8;
+      --royal-mid: #2563EB;
+      --royal-pale: #EEF3FF;
+      --mint: #4ADE80;
+      --mint-s: #16A34A;
+      --ink: #0F172A;
+      --gray: #64748B;
+      --border: rgba(226, 232, 240, 0.14);
+      --surface: rgba(255, 255, 255, 0.04);
+      --white: #FFFFFF;
+      --slide-w: 1440px;
+      --slide-h: 810px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      background: #020617;
+      color: var(--white);
+      font-family: 'Jost', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media screen {
+      body {
+        padding: 2rem 1rem 4rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+      }
+      .slide {
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      }
+      .print-hint {
+        position: fixed;
+        bottom: 1.25rem;
+        right: 1.25rem;
+        z-index: 50;
+        background: var(--mint);
+        color: var(--ink);
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 0.65rem 1rem;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-family: 'Jost', sans-serif;
+      }
+      .print-hint:hover { background: #22c55e; }
+    }
+
+    @media print {
+      @page { size: 13.333in 7.5in; margin: 0; }
+      html, body {
+        background: none;
+        padding: 0;
+        width: 13.333in;
+        height: auto;
+      }
+      .print-hint { display: none !important; }
+      .slide {
+        width: 13.333in;
+        height: 7.5in;
+        page-break-after: always;
+        break-after: page;
+        box-shadow: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .slide:last-child { page-break-after: auto; }
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .slide {
+      width: var(--slide-w);
+      height: var(--slide-h);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    /* ── Logo ── */
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--mint);
+      border-radius: 6px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      gap: 2px;
+      padding: 3px;
+    }
+    .logo-icon b {
+      background: var(--mint);
+      border-radius: 1px;
+      display: block;
+    }
+    .logo-icon b:nth-child(2),
+    .logo-icon b:nth-child(4),
+    .logo-icon b:nth-child(6),
+    .logo-icon b:nth-child(8) { background: transparent; }
+    .logo-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: var(--white);
+    }
+
+    /* ═══════════════ SLIDE 1 — CAPA ═══════════════ */
+    .cover {
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 20%, rgba(27, 79, 216, 0.35), transparent 55%),
+        radial-gradient(ellipse 50% 50% at 15% 85%, rgba(74, 222, 128, 0.12), transparent 50%),
+        linear-gradient(145deg, var(--navy-deep) 0%, var(--navy) 48%, #132454 100%);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 2.5rem 3.25rem 2.25rem;
+    }
+
+    .cover-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cover-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+    }
+
+    .cover-hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 1.1rem;
+      max-width: 920px;
+    }
+    @media screen {
+      .cover-hero { animation: rise 0.7s ease-out both; }
+    }
+    .cover-kicker {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--mint);
+    }
+    .cover-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 5.4rem;
+      line-height: 0.92;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+    }
+    .cover-title span {
+      color: transparent;
+      background: linear-gradient(90deg, #fff 0%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .cover-sub {
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.68);
+      max-width: 560px;
+      line-height: 1.45;
+    }
+    .cover-meta {
+      display: flex;
+      gap: 1.75rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .cover-meta-item strong {
+      display: block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+    .cover-meta-item span {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+      font-weight: 500;
+    }
+
+    .cover-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1.35rem;
+    }
+    .cover-partners {
+      display: flex;
+      gap: 2.5rem;
+      align-items: flex-end;
+    }
+    .partner {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .partner-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .partner-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .partner-name.serif {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-weight: 600;
+      font-style: italic;
+      letter-spacing: 0.02em;
+    }
+    .cover-confidential {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.35);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════ SLIDE 2 — TEASER ═══════════════ */
+    .teaser {
+      background:
+        radial-gradient(ellipse 60% 40% at 100% 0%, rgba(27, 79, 216, 0.22), transparent 50%),
+        linear-gradient(180deg, var(--navy-deep) 0%, var(--navy) 100%);
+      padding: 1.35rem 1.5rem 1.2rem;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 0.85rem;
+    }
+
+    .teaser-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .teaser-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .teaser-header h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .teaser-header h1 em {
+      font-style: normal;
+      color: var(--mint);
+    }
+    .teaser-tag {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .grid-main {
+      display: grid;
+      grid-template-columns: 1.05fr 1.55fr 0.95fr;
+      gap: 0.75rem;
+      min-height: 0;
+    }
+
+    .col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      min-height: 0;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.55rem 0.85rem;
+      background: rgba(27, 79, 216, 0.18);
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-head h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .panel-body {
+      padding: 0.7rem 0.85rem 0.85rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .photo {
+      width: 100%;
+      height: 148px;
+      object-fit: cover;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .place-name, .product-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      line-height: 1;
+    }
+
+    .kv {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding: 0.22rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .kv:last-child { border-bottom: none; }
+    .kv-label {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.55);
+      font-weight: 500;
+    }
+    .kv-value {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      text-align: right;
+      white-space: nowrap;
+    }
+    .kv-value.mint { color: var(--mint); }
+    .kv-value.royal { color: #93c5fd; }
+
+    .economics {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      grid-template-rows: auto auto auto;
+      gap: 0.55rem;
+      height: 100%;
+    }
+    .econ-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.55rem 0.7rem 0.65rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      min-height: 0;
+    }
+    .econ-card.carteira {
+      grid-row: 1 / span 2;
+    }
+    .econ-card.resultado {
+      border-color: rgba(74, 222, 128, 0.28);
+      background: linear-gradient(165deg, rgba(74, 222, 128, 0.08), rgba(255, 255, 255, 0.03));
+    }
+    .econ-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #93c5fd;
+      margin-bottom: 0.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .econ-title::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--mint);
+      flex-shrink: 0;
+    }
+    .econ-card.resultado .econ-title { color: var(--mint); }
+
+    .sponsor-grid {
+      display: grid;
+      grid-template-rows: 1fr 0.72fr 1fr;
+      gap: 0.55rem;
+      height: 100%;
+    }
+    .sponsor-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.6rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .sponsor-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #93c5fd;
+      margin-bottom: 0.1rem;
+    }
+    .yes {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--mint);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .yes::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2);
+    }
+
+    .footer-bar {
+      position: absolute;
+      left: 1.5rem;
+      right: 1.5rem;
+      bottom: 0.55rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.28);
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <button class="print-hint" type="button" onclick="window.print()">Imprimir / Salvar PDF</button>
+
+  <!-- ═══════════════ CAPA ═══════════════ -->
+  <section class="slide cover" aria-label="Capa">
+    <header class="cover-top">
+      <div class="logo" aria-label="IMOBI">
+        <div class="logo-icon" aria-hidden="true">
+          <b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b>
+        </div>
+        <span class="logo-name">IMOBI</span>
+      </div>
+      <div class="cover-badge">Confidencial · Comitê do Fundo</div>
+    </header>
+
+    <div class="cover-hero">
+      <p class="cover-kicker">Teaser de operação</p>
+      <h1 class="cover-title"><span>Casa Premier</span></h1>
+      <p class="cover-sub">
+        Empreendimento residencial em Goiânia — tipologias premium de 3 suítes,
+        estruturado para análise de crédito e alocação do fundo IMOBI.
+      </p>
+      <div class="cover-meta">
+        <div class="cover-meta-item">
+          <strong>Goiânia</strong>
+          <span>Praça</span>
+        </div>
+        <div class="cover-meta-item">
+          <strong>R$ 23,1M</strong>
+          <span>VGV total</span>
+        </div>
+        <div class="cover-meta-item">
+          <strong>23,0%</strong>
+          <span>Margem</span>
+        </div>
+        <div class="cover-meta-item">
+          <strong>38,5%</strong>
+          <span>Vendas</span>
+        </div>
+      </div>
+    </div>
+
+    <footer class="cover-footer">
+      <div class="cover-partners">
+        <div class="partner">
+          <span class="partner-label">Produto</span>
+          <span class="partner-name serif">Casa Premier</span>
+        </div>
+        <div class="partner">
+          <span class="partner-label">Sponsor</span>
+          <span class="partner-name">Apicy Inc.</span>
+        </div>
+        <div class="partner">
+          <span class="partner-label">Estruturador</span>
+          <span class="partner-name">IMOBI</span>
+        </div>
+      </div>
+      <p class="cover-confidential">Uso exclusivo · Comitê de crédito</p>
+    </footer>
+  </section>
+
+  <!-- ═══════════════ TEASER ═══════════════ -->
+  <section class="slide teaser" aria-label="Teaser Casa Premier">
+    <header class="teaser-header">
+      <div class="teaser-header-left">
+        <div class="logo" aria-label="IMOBI">
+          <div class="logo-icon" aria-hidden="true">
+            <b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b>
+          </div>
+          <span class="logo-name">IMOBI</span>
+        </div>
+        <h1>Teaser · <em>Casa Premier</em></h1>
+      </div>
+      <p class="teaser-tag">Comitê do Fundo · Apicy Inc.</p>
+    </header>
+
+    <div class="grid-main">
+      <!-- COLUNA ESQ: PRAÇA + PRODUTO -->
+      <div class="col">
+        <article class="panel">
+          <div class="panel-head"><h2>Praça</h2></div>
+          <div class="panel-body">
+            <img class="photo" src="assets/praca-goiania.png" alt="Vista aérea de Goiânia" />
+            <p class="place-name">Goiânia</p>
+            <div class="kv"><span class="kv-label">PIB</span><span class="kv-value royal">R$ 76Bi</span></div>
+            <div class="kv"><span class="kv-label">População</span><span class="kv-value">1,5 mi</span></div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head"><h2>Produto</h2></div>
+          <div class="panel-body">
+            <img class="photo" src="assets/produto-casa-premier.png" alt="Render Casa Premier" />
+            <p class="product-name">Casa Premier</p>
+            <div class="kv"><span class="kv-label">Tipologia</span><span class="kv-value">Casas · 3 suítes</span></div>
+            <div class="kv"><span class="kv-label">Ticket médio</span><span class="kv-value mint">R$ 1,8M</span></div>
+          </div>
+        </article>
+      </div>
+
+      <!-- COLUNA CENTRO: ECONOMICS -->
+      <div class="col">
+        <div class="panel-head" style="border-radius: 12px; margin-bottom: -0.15rem;">
+          <h2>Economics</h2>
+        </div>
+        <div class="economics">
+          <article class="econ-card carteira">
+            <h3 class="econ-title">Carteira</h3>
+            <div class="kv"><span class="kv-label">VGV · total</span><span class="kv-value">R$ 23,1M</span></div>
+            <div class="kv"><span class="kv-label">VGV · permuta</span><span class="kv-value">R$ 3,0M</span></div>
+            <div class="kv"><span class="kv-label">VGV · vendido</span><span class="kv-value mint">R$ 8,5M</span></div>
+            <div class="kv"><span class="kv-label">VGV · estoque</span><span class="kv-value">R$ 14,6M</span></div>
+            <div class="kv"><span class="kv-label">Unidades · totais</span><span class="kv-value">15</span></div>
+            <div class="kv"><span class="kv-label">Unidades · permuta</span><span class="kv-value">2</span></div>
+            <div class="kv"><span class="kv-label">Unidades · vendidas</span><span class="kv-value mint">5</span></div>
+            <div class="kv"><span class="kv-label">Unidades · estoque</span><span class="kv-value">8</span></div>
+            <div class="kv"><span class="kv-label">Recebível · incorrido</span><span class="kv-value">R$ 1,5M</span></div>
+            <div class="kv"><span class="kv-label">Recebível · a incorrer</span><span class="kv-value">R$ 7,0M</span></div>
+          </article>
+
+          <article class="econ-card">
+            <h3 class="econ-title">Cronograma</h3>
+            <div class="kv"><span class="kv-label">Lançamento</span><span class="kv-value">out/24</span></div>
+            <div class="kv"><span class="kv-label">Início de obras</span><span class="kv-value">jun/26</span></div>
+            <div class="kv"><span class="kv-label">Entrega</span><span class="kv-value">nov/27</span></div>
+            <div class="kv"><span class="kv-label">% vendas</span><span class="kv-value mint">38,5%</span></div>
+            <div class="kv"><span class="kv-label">% obras</span><span class="kv-value">6,5%</span></div>
+          </article>
+
+          <article class="econ-card">
+            <h3 class="econ-title">Obra</h3>
+            <div class="kv"><span class="kv-label">Custo · total</span><span class="kv-value">R$ 13,8M</span></div>
+            <div class="kv"><span class="kv-label">Custo · incorrido</span><span class="kv-value">R$ 0,9M</span></div>
+            <div class="kv"><span class="kv-label">Custo · a incorrer</span><span class="kv-value">R$ 12,9M</span></div>
+          </article>
+
+          <article class="econ-card">
+            <h3 class="econ-title">Terreno</h3>
+            <div class="kv"><span class="kv-label">Negociação</span><span class="kv-value">Permuta física</span></div>
+            <div class="kv"><span class="kv-label">Valor</span><span class="kv-value">R$ 3,0M / 2 un.</span></div>
+          </article>
+
+          <article class="econ-card resultado">
+            <h3 class="econ-title">Resultado</h3>
+            <div class="kv"><span class="kv-label">Margem</span><span class="kv-value mint">R$ 6,0M (23,0%)</span></div>
+            <div class="kv"><span class="kv-label">Equity</span><span class="kv-value">R$ 500k (1,9%)</span></div>
+            <div class="kv"><span class="kv-label">Conforto total</span><span class="kv-value mint">R$ 6,5M (24,9%)</span></div>
+          </article>
+        </div>
+      </div>
+
+      <!-- COLUNA DIR: SPONSOR -->
+      <div class="col">
+        <div class="panel-head" style="border-radius: 12px;">
+          <h2>Sponsor</h2>
+        </div>
+        <div class="sponsor-grid">
+          <article class="sponsor-card">
+            <h3>Track-record</h3>
+            <div class="kv"><span class="kv-label">Tempo de atuação</span><span class="kv-value mint">&gt;10 anos</span></div>
+            <div class="kv"><span class="kv-label">Empreendimentos entregues</span><span class="kv-value mint">&gt;10</span></div>
+          </article>
+          <article class="sponsor-card">
+            <h3>Robustez</h3>
+            <div class="kv"><span class="kv-label">PL</span><span class="kv-value royal">R$ 4,1M</span></div>
+          </article>
+          <article class="sponsor-card">
+            <h3>Governança</h3>
+            <div class="kv"><span class="kv-label">RI emitido</span><span class="yes">Sim</span></div>
+            <div class="kv"><span class="kv-label">SPE</span><span class="yes">Sim</span></div>
+            <div class="kv"><span class="kv-label">Patrimônio de afetação</span><span class="yes">Sim</span></div>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <span>IMOBI · Crédito imobiliário</span>
+      <span>Casa Premier · Goiânia · Confidencial</span>
+    </div>
+  </section>
+</body>
+</html>
